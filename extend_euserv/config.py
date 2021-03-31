@@ -8,10 +8,12 @@ from pydantic import BaseSettings, AnyUrl  # pylint: disable=no-name-in-module
 class Settings(BaseSettings):  # pylint: disable=too-few-public-methods
     """Configure params DEBUG HEADFUL PROXY."""
 
+    password: str = ""
+    email: str = ""
+
     debug: bool = False
     headful: bool = False
     proxy: Optional[AnyUrl] = None
-    password: str = ""
 
     class Config:  # pylint: disable=too-few-public-methods
         """Config."""

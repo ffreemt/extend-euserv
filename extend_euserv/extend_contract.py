@@ -24,13 +24,13 @@ URL = "https://support.euserv.com/"
 
 # fmt: off
 async def extend_contract(
-        page: pyppeteer.page.Page,
+        page: Optional[pyppeteer.page.Page] = None,
         contract_info: bool = True
 ) -> Tuple[str, Optional[str]]:
     # fmt: on
     """Fetch and update contracts info and their update links if any.
 
-    page: pyppeteer.page.Page
+    page = await login_euserv(config.email, config.password)
     contract_info: bool = True
 
     return info, links
@@ -91,9 +91,9 @@ async def extend_contract(
     """
     #
 
+    _ = """
     if page.isClosed():
         logger.warning("Invalid page handle provided, return ([], [])...")
-        # return [], []
 
     if page.url != "https://support.euserv.com/index.iphp":
         logger.warning(
@@ -103,39 +103,19 @@ async def extend_contract(
             "We proceed nevertheless. ",
             page.url
         )
+    # """
 
+    _ = """
     try:
         await page.goto("https://support.euserv.com/index.iphp")
     except Exception as exc:
         logger.error("%s, trying to relog in...", exc)
         try:
-            page = await login_euserv()
+            page = await login_euserv(config.email, config.password)
         except Exception as exc:
             logger.error("%s, exiting", exc)
             raise SystemExit(1) from exc
-
-    # make sure we are on the right page
-    # if page.url != URL:  # no go
-    if False:
-        try:
-            done, pending = await asyncio.wait([
-                page.goto(URL),
-                page.waitForNavigation()
-            ])
-        except Exception as exc:
-            logger.error("%s, exiting", exc)
-            # return [str(exc)], [""]
-
-        err_flag = False
-        for task in pending:
-            err_flag = False
-            try:
-                await task
-            except Exception as exc:
-                logger.error(exc)
-                err_flag = True
-        if err_flag:
-            raise Exception("err_flag: %s, see previous messages in the log", err_flag)
+    # """
 
     # retrieve page text
     # content = await page.content()
@@ -144,7 +124,7 @@ async def extend_contract(
     logger.info("Clicking Contracts...")
     xpath_contracts = '//a[contains(text(),"Contracts")]'
     try:
-        btn_contracts = await page.waitForXPath(xpath_contracts)
+        btn_contracts = await page.waitForXPath(xpath_contracts, timout=45000)
     except Exception as exc:
         logger.error(exc)
         raise

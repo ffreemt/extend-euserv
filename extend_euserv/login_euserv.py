@@ -11,9 +11,12 @@ import dotenv
 import pyppeteer
 from logzero import logger
 from extend_euserv.get_ppbrowser import get_ppbrowser, BROWSER
+from extend_euserv.config import Settings
 
 # load .env to os.environ
-dotenv.load_dotenv()
+# dotenv.load_dotenv()
+
+CONFIG = Settings()
 URL = "https://www.noip.com/members/dns/"
 URL = "https://support.euserv.com/"
 
@@ -92,9 +95,11 @@ async def login_euserv(
         raise SystemExit(1) from exc
 
     if not email:
-        email = os.environ.get("EUSERV_EMAIL")
+        # email = os.environ.get("EUSERV_EMAIL")
+        email = CONFIG.email
     if not password:
-        password = os.environ.get("EUSERV_PASSWORD")
+        # password = os.environ.get("EUSERV_PASSWORD")
+        password = CONFIG.password
 
     if not email:
         logger.error('Supply email address login_euserv(email="...") or set it in .env or as ENVIRONMENT (set/export EUSERV_EMAILE="...")')
