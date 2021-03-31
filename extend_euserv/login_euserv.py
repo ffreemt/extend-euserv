@@ -27,7 +27,7 @@ async def login_euserv(
     # fmt: on
     """Login to https://support.euserv.com/.
 
-    return a pyppeteer.page.Page for subsequent processin.
+    return a pyppeteer.page.Page for subsequent processing.
     """
     try:
         _ = await browser.newPage()
@@ -142,6 +142,6 @@ async def login_euserv(
     if "Cover Page" in (await page.content()):
         logger.info("Good news: we are in.")
     else:
-        logger.warning("Something is not right, erserv's page layout is changed?")
+        logger.warning("Something is not right, maybe euserv's page layout is changed?")
 
     return page

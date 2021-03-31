@@ -11,6 +11,7 @@ class Settings(BaseSettings):  # pylint: disable=too-few-public-methods
     debug: bool = False
     headful: bool = False
     proxy: Optional[AnyUrl] = None
+    password: str = ""
 
     class Config:  # pylint: disable=too-few-public-methods
         """Config."""
