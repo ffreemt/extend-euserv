@@ -23,7 +23,7 @@ URL = "https://support.euserv.com/"
 
 
 # fmt: off
-async def extend_contracts(
+async def extend_contract(
         page: pyppeteer.page.Page,
         contract_info: bool = True
 ) -> Tuple[str, Optional[str]]:
