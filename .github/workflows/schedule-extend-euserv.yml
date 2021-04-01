@@ -1,0 +1,35 @@
+name: schedule-extend-euserv
+
+on:
+  push:
+  schedule:
+    - cron: '15 21 */9 * *'
+jobs:
+  extend-euserv__main__:
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.7]
+        poetry-version: [1.1.2]
+        os: [ubuntu-18.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: install packages
+        run: poetry install --no-dev
+      - name: Run extend-euserv
+        env:
+          EUSERV_EMAIL: ${{ secrets.EUSERV_EMAIL }}
+          EUSERV_PASSWORD: ${{ secrets.EUSERV_PASSWORD }}
+        run: |
+          poetry run python -m extend_euserv -s
+          # -d show debug messages
+          # -s turn on short delay (sleepon)
+          # -i info only (no attempt to extend)
