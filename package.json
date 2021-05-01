@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pyright": "nodemon -w tests -w extend_euserv -e .py -x pyright",
-    "pyright": "nodemon -w tests -w extend_euserv -e .py -x pylint",
+    "pylint": "nodemon -w tests -w extend_euserv -e .py -x pylint extend_euserv tests",
     "style": "nodemon -w tests -w extend_euserv -e .py -x \"black tests extend_euserv && python -m flake8 tests extend_euserv \""
   },
   "repository": {

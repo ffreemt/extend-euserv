@@ -3,11 +3,12 @@
 
 from typing import Optional
 
-import os
+# import os
 from time import sleep
 from random import randint
 import asyncio
-import dotenv
+
+# import dotenv
 import pyppeteer
 from logzero import logger
 from extend_euserv.get_ppbrowser import get_ppbrowser, BROWSER

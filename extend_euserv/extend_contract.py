@@ -1,5 +1,5 @@
 """Fetch contracts info and update links."""
-# pylint:
+# pylint: disable=too-many-locals, too-many-branches, unused-variable, unused-import, duplicate-code, too-many-statements
 
 from typing import (
     # List,
@@ -16,7 +16,8 @@ import pyppeteer
 from logzero import logger
 
 from extend_euserv.config import Settings
-from extend_euserv.login_euserv import login_euserv
+
+# from extend_euserv.login_euserv import login_euserv
 
 config = Settings()
 URL = "https://support.euserv.com/"
@@ -131,7 +132,7 @@ async def extend_contract(
     # await btn_contracts.click()
     # await page.waitForNavigation()
     try:
-        done, pedning = await asyncio.wait([
+        done, pending = await asyncio.wait([
             btn_contracts.click(),
             page.waitForNavigation(),
         ])
@@ -258,7 +259,7 @@ async def extend_contract(
 
     # Cliking [extend contract] button
     try:
-        logger.info("Cliking [extend contract] button")
+        logger.info("Clicking [extend contract] button")
         done, pending = await asyncio.wait([
             bhandler.click(),
             page.waitForNavigation({"timeout": 40 * 1000}),
@@ -282,7 +283,6 @@ async def extend_contract(
     # //input[contains(text(), 'Extend')]  NOK
 
     confirm = '.kc2_customer_contract_details_change_plan_item_action_button'
-
     try:
         _ = await page.waitForSelector(confirm)
     except Exception as exc:
@@ -297,12 +297,35 @@ async def extend_contract(
         raise
 
     # final confirm
+
+    # Final confirm
+    logger.info("Clicking Confirm...")
+    xpath = "//input[@value='Confirm']"
     try:
-        await page.type('input[name="password"]', config.password + "\n", {"delay": 20})
+        btn = await page.waitForXPath(xpath, timout=45000)
     except Exception as exc:
         logger.error(exc)
         raise
+    try:
+        done, pending = await asyncio.wait([
+            btn.click(),
+            # page.waitForNavigation(),  # should not check
+        ])
+    except Exception as exc:
+        logger.error(exc)
+        raise
+    err_flag = False
+    for task in done:
+        err_flag = False
+        try:
+            await task
+        except Exception as exc:
+            err_flag = True
+            logger.error(exc)
+    if err_flag:
+        raise Exception("err_flag: %s, see previous messages in the log." % err_flag)
 
+    # other info
     content = await page.content()
     doc = pq(content)('.kc2_content_table')
 
@@ -316,8 +339,8 @@ async def extend_contract(
     pairs = [*zip(extra.splitlines()[1:][::2], extra.splitlines()[1:][1::2])]
     res = '\n'.join(f"{elm[0]:33} {elm[1]}" for elm in pairs)
 
-    logger.info("\n" + "\n".join(info))
-    logger.info("\n" + res)
+    logger.info("\n%s", "\n".join(info))
+    logger.info("\n%s", res)
 
     # return contracts, full_links
     # return info, "TODO"

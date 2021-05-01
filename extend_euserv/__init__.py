@@ -1,3 +1,4 @@
+# pylint: disable=missing-module-docstring
 from logzero import logger
 
 __version__ = "0.1.0"
