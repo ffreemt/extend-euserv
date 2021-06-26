@@ -342,8 +342,10 @@ async def extend_contract(
     # Final confirm
     logger.info("Clicking Confirm...")
     xpath = "//input[@value='Confirm']"
+    sel = "#kc2_customer_contract_details_extend_contract_confirmation_dialog_action_container > input[type=button]:nth-child(2)"
     try:
         btn = await page.waitForXPath(xpath, timout=45000)
+        # btn = await page.waitForSelector(sel, timout=45000)
     except Exception as exc:
         logger.error(exc)
         raise
