@@ -1,4 +1,17 @@
-"""Fetch contracts info and update links."""
+"""Fetch contracts info and update links.
+
+in ipython
+Setup as in __main__ prov_argv and main
+
+page = LOOP.run_until_complete(login_euserv(CONFIG.email, CONFIG.password))
+# or page = await login_euserv(CONFIG.email, CONFIG.password)
+
+r = await extend_contract(page, contract_info=False)
+await page.close()
+
+sel = "#kc2_customer_contract_details_change_plan_item_container_13448 > tbody > tr > td:nth-child(2) > input"
+
+"""
 # pylint: disable=too-many-locals, too-many-branches, unused-variable, unused-import, duplicate-code, too-many-statements
 
 from typing import (
@@ -141,7 +154,7 @@ async def extend_contract(
         raise
     err_flag = False
     for task in done:
-        err_flag = False
+        # err_flag = False
         try:
             await task
         except Exception as exc:
@@ -170,8 +183,8 @@ async def extend_contract(
     except Exception as exc:
         logger.error(exc)
         raise
+    err_flag = False
     for task in done:
-        err_flag = False
         try:
             await task
         except Exception as exc:
@@ -247,6 +260,10 @@ async def extend_contract(
         logger.info(" Nothing to extend yet...")
         return "\n".join(info), None
 
+    # xpath = "//div/input"  # "div > input"
+    # bhandler = await page.waitForXPath(xpath)
+    # => alt_selector = "div > input[type=button]"
+
     if _ > 1:
         logger.warning("There are %s items, the current version of extend_euserv only extends the first item.", _)
 
@@ -282,12 +299,36 @@ async def extend_contract(
 
     # //input[contains(text(), 'Extend')]  NOK
 
+    # Extend
+    logger.info("Clicking Extend..")
+    sel_extend = "#kc2_customer_contract_details_change_plan_item_container_13448 > tbody > tr > td:nth-child(2) > input"
+
+    try:
+        bha = await page.waitForSelector(sel_extend)
+    except Exception as e:
+        logger.error(e)
+        raise
+
+    try:
+        await bha.click()
+    except Exception as e:
+        logger.error(e)
+        raise
+
+    _ = """
+    # clicking Confirm
+    logger.info("Clicking Confirm...")
+
     confirm = '.kc2_customer_contract_details_change_plan_item_action_button'
     try:
         _ = await page.waitForSelector(confirm)
     except Exception as exc:
         logger.error(exc)
         raise
+    # """
+
+    # pause 2 s
+    await asyncio.sleep(2)
 
     # send password
     try:

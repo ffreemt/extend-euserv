@@ -1,5 +1,4 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
 
@@ -141,5 +140,7 @@ cython_debug/
 installed-with-nonebot2.txt
 org-loc.txt
 links/
-**/__pycache__/
+**/__pycache__
+extend_euserv/__pycache__
 .gitignore
+links

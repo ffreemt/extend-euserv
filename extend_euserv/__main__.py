@@ -110,6 +110,9 @@ def proc_argv(_):  # pylint: disable=too-many-branches  # noqa: C901
     password = FLAGS.password
     try:
         page = LOOP.run_until_complete(login_euserv(username, password))
+        # or setup .env or os.environ['euserv_password'] ['euserv_email']
+        # CONFIG = Settings()
+        # page = LOOP.run_until_complete(login_euserv(CONFIG.email, CONFIG.password))
     except Exception as exc:
         logger.error("login: %s", exc)
         logger.error("Unable to login it appears, exiting")
@@ -140,7 +143,18 @@ def proc_argv(_):  # pylint: disable=too-many-branches  # noqa: C901
 
 
 def main():
-    """Main."""
+    """Main.
+
+    testing in ipython
+    FLAGS(shlex.split("app -u un -p pw")) or
+    import os
+    os.environ['ppbrowser_headful'] = '1'
+    os.environ['euserv_password'] = 'pw'  # snippets-euserv
+    os.environ['euserv_email'] = 'emaill'
+    os.environ['euserv_headful'] = '1'
+
+    CONFIG = Settings()
+    """
     app.run(proc_argv)
 
 
