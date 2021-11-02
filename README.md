@@ -4,6 +4,8 @@
 
 Extend expiry date of euserv.com
 
+**Update 20211102: No longer works. Euserv has implemented a new mechanism (PIN via email) for extending expiry date. Automatic renewal will be difficult if not impossible.**
+
 ## Automate extending expiry date of euserv.com
 
 *   Fork this repo [https://github.com/ffreemt/extend-euserv/fork](https://github.com/ffreemt/extend-euserv/fork)

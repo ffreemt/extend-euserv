@@ -154,6 +154,14 @@ def main():
     os.environ['euserv_headful'] = '1'
 
     CONFIG = Settings()
+    username = CONFIG.email
+    password = CONFIG.password
+
+    info = False  # attempt to extend
+    contract_info = info
+
+    # continue ine by line from line 111
+
     """
     app.run(proc_argv)
 
