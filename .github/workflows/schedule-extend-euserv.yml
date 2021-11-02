@@ -1,6 +1,6 @@
 name: schedule-extend-euserv
 
-on:
+# on:
   # push:
   # schedule:
     # - cron: '15 21 */9 * *'
